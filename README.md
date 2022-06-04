@@ -29,6 +29,3 @@ The outcome of this phase: the user will be able to register using email and log
 
 ## Phase 5
 - I will add balance to the user
-
-## Phase 6
-- I will add AJAX to the application for better interactions
