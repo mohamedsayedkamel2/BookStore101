@@ -21,11 +21,8 @@ The outcome of this phase: the user will be able to register using email and log
 ## Phase 2 (DONE)
 - I'll implement Buying books functionality
 
-## Phase 3
+## Phase 3 (DONE)
 - I will implement refund functionality
 
-## Phase 4
+## Phase 4 (DONE)
 - Referral system will be implemented
-
-## Phase 5
-- I will add balance to the user

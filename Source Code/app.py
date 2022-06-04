@@ -9,7 +9,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required, usd
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+
 
 # Configure application
 app = Flask(__name__)
@@ -99,6 +100,7 @@ def register():
     email = request.form.get("email")
     password = request.form.get("password")
     confirmation = request.form.get("confirmation")
+    referrer = request.form.get("referrer")
     if name == "":
         return apology("Invalid name: Blank, or already exists")
     if email == "" or len(db.execute('SELECT email FROM user WHERE email = ?', email)) > 0:
@@ -106,8 +108,7 @@ def register():
     if password == "" or password != confirmation:
         return apology("Invalid Password: Blank, or does not match")
     # Add new user to user db (includes: email and HASH of password)
-    db.execute('INSERT INTO user (name, email, password) \
-            VALUES(?, ?, ?)', name, email, generate_password_hash(password))
+    db.execute('INSERT INTO user (name, email, password, referrer) VALUES(?, ?, ?, ?)', name, email, generate_password_hash(password), referrer)
     # Query database for email
     rows = db.execute("SELECT * FROM user WHERE email = ?", email)
     # Log user in, i.e. Remember that this user has logged in
@@ -125,3 +126,74 @@ def logout():
 
     # Redirect user to login form
     return redirect("/")
+
+
+#Index page - Buy Page
+@app.route("/")
+def index():
+    """Index page - Buy Page """
+    books = db.execute("SELECT * FROM book")
+    return render_template("index.html", books = books)
+
+
+@app.route("/buy")
+@login_required
+def buy():
+    user_id = session["user_id"]
+    user = db.execute("SELECT * FROM user WHERE id=?", user_id)
+    book_id = request.args.get("id")
+    book = db.execute("SELECT * FROM book WHERE id=?", book_id)
+    price = book[0]["price"]
+    #if the user's refree count is higher than or equal 10 the do the following
+    refree_count = user[0]["refree_count"]
+    if refree_count >= 10:
+        # Give the user 3 dollars discount
+        price = price - 3
+        # Then decrement the refree_count by one so the user don't abuse the system
+        refree_count - 1
+        db.execute("UPDATE user SET refree_count= ?", refree_count)
+    db.execute("INSERT INTO user_books (user_id, book_id, title, Author, price) VALUES (?, ?, ?, ?, ?)", user_id, book[0]["id"], book[0]["title"], book[0]["author"], price)
+    # Check if the user has a referrer if so then update the referrer's count
+    referrer = user[0]["referrer"]
+    if referrer != "":
+        # Get the referrer by it's email from the DB
+        referrer_user = db.execute('SELECT * FROM user WHERE email=?', referrer)
+        # Increment the refree_count
+        refree_count = referrer_user[0]["refree_count"]
+        refree_count += 1
+        # Then store the new count in the Database
+        db.execute('UPDATE user SET refree_count=? WHERE email=?', refree_count, referrer)
+    return redirect("/history")
+
+
+@app.route("/history")
+@login_required
+def allBooks():
+    user_id = session["user_id"]
+    books = db.execute("SELECT id, title, author, price, purchase_date FROM user_books WHERE user_id = ?", user_id)
+    return render_template("history.html", books=books)
+
+
+@app.route("/refund")
+@login_required
+def refund():
+    user_id = session["user_id"]
+    order_id = request.args.get("id")
+    date = db.execute("SELECT purchase_date FROM user_books WHERE id=? AND user_id=?", order_id, user_id)
+    pruchase_date_str = date[0]["purchase_date"]
+
+    # Convert the pruchase date from string to date
+    pruchase_date = datetime.strptime(pruchase_date_str, '%Y-%m-%d')
+    # Get the current day
+    today = datetime.today().strftime("%Y-%m-%d")
+    # Convert today from string to a date
+    today = datetime.strptime(today, "%Y-%m-%d")
+    # Add 14 days to the purchase day
+    end_date = pruchase_date + timedelta(days=14)
+    end_date = end_date.strftime("%Y-%m-%d")
+    end_date = datetime.strptime(end_date, '%Y-%m-%d')
+    print(end_date)
+    # Check if 14 days has passed of day of purchase
+    if (today < end_date):
+        db.execute("DELETE FROM user_books WHERE user_id=? AND id=?", user_id, order_id)
+    return redirect("/history")
