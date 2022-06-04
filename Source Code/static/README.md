@@ -13,7 +13,7 @@ Books store is a web application developed using Python, Flask and SQLite, on th
 ### Non-Functional Requirements:
 - Use Bootstrap for styling the website
 
-## Phase 1
+## Phase 1 (DONE)
 1. I will create the website with HTML and Bootstrap
 2. I will implement the login and registration functionalites
 The outcome of this phase: the user will be able to register using email and login and the user will be greeted with Hello, World page styled in bootstrap
