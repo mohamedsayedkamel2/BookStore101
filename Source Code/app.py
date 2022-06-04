@@ -75,7 +75,7 @@ def login():
         rows = db.execute("SELECT * FROM user WHERE email = ?", request.form.get("email"))
 
         # Ensure email exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(rows) != 1 or not check_password_hash(rows[0]["password"], request.form.get("password")):
             return apology("invalid email and/or password", 403)
 
         # Remember which user has logged in
