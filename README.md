@@ -1,7 +1,5 @@
 # Book Store Web Application
 
-#### Video Demo:  [Video link](https://john.doe/)
-
 #### Description 
 Books store is a web application developed using Python, Flask and SQLite, on the website the user can buy books
 
