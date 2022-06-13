@@ -1,26 +1,21 @@
 # Book Store Web Application
 
-#### Description 
+### Description 
 Books store is a web application developed using Python, Flask and SQLite, on the website the user can buy books
 
-### Functional Requirements:
-1. Allow users to buy books
-2. Allow users to fund the book before 14 days of purchase
-3. Implement a referral system
+### Used tools & technologies:
+1. Python
+2. Flask framework
+3. SQLite
+4. HTML/CSS
+5. Bootstrap
 
-### Non-Functional Requirements:
-- Use Bootstrap for styling the website
 
-## Phase 1 (DONE)
-1. I will create the website with HTML and Bootstrap
-2. I will implement the login and registration functionalites
-The outcome of this phase: the user will be able to register using email and login and the user will be greeted with Hello, World page styled in bootstrap
+### The appication functionalties:
+1. The user can buy books from the website
+2. If the purchase date is less than 14 days then the user can refund the application
+3. If a user refereed other 10 users to the website then the user will have a discount on the books he/she buys
 
-## Phase 2 (DONE)
-- I'll implement Buying books functionality
+### Application Demo Video: https://www.youtube.com/watch?v=GNlBJ1h4rGA
 
-## Phase 3 (DONE)
-- I will implement refund functionality
-
-## Phase 4 (DONE)
-- Referral system will be implemented
+> Note: This application is the final project of Harvard's CS50 course
