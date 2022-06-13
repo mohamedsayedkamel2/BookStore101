@@ -20,6 +20,7 @@ Books store is a web application developed using Python, Flask and SQLite, on th
 
 ### Application Demo photos: 
 ![First Image](https://raw.githubusercontent.com/msayedkamel2003/portfolio/main/images/python-1.png)
-![Second Image]((https://raw.githubusercontent.com/msayedkamel2003/portfolio/main/images/python-2.png)
+![Second Image](https://raw.githubusercontent.com/msayedkamel2003/portfolio/main/images/python-2.png)
+
 
 > Note: This application is the final project of Harvard's CS50 course
